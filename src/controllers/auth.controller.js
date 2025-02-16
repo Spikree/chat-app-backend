@@ -5,10 +5,10 @@ import bcrypt from "bcryptjs";
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
 
-  if(!fullName || !email || !password) {
+  if (!fullName || !email || !password) {
     return res.status(400).json({
-        message: "All fields are required"
-    })
+      message: "All fields are required",
+    });
   }
 
   if (password.length < 6) {
@@ -60,9 +60,52 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  res.send("signup route");
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      message: "All the fields are requireddd",
+    });
+  }
+  try {
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({ message: "Invalid credentials" });
+    }
+
+    const isValid = await bcrypt.compare(password, user.password);
+
+    if (!isValid) {
+      return res.status(404).json({ message: "Invalid credentials" });
+    }
+
+    generateToken(user._id, res);
+
+    res.status(200).json({
+      _id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      profilePic: user.profilePic,
+    });
+  } catch (error) {
+    console.log("Error in login controller : ", error);
+    return res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 };
 
 export const logout = async (req, res) => {
-  res.send("signup route");
+  try {
+    res.cookie("token", "", { maxAge: 0 });
+    res.status(200).json({
+      message: "Logged out sucessfully",
+    });
+  } catch (error) {
+    console.log("Error in logout controller");
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
 };
