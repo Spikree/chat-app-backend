@@ -47,6 +47,7 @@ export const signup = async (req, res) => {
         fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
+        message: "Account created successfully"
       });
     } else {
       return res.status(400).json({
@@ -88,6 +89,7 @@ export const login = async (req, res) => {
       fullName: user.fullName,
       email: user.email,
       profilePic: user.profilePic,
+      message: "Log in successfull"
     });
   } catch (error) {
     console.log("Error in login controller : ", error);
@@ -113,7 +115,7 @@ export const logout = async (req, res) => {
 
 export const updateProfile = async (req,res) => {
   const {profilePic} = req.body;
-  const userId = req.User._id;
+  const userId = req.user._id;
 
   if(!profilePic) {
     return res.status(400).json({
