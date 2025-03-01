@@ -19,7 +19,7 @@ app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 const port = process.env.PORT || 4001;
 
 app.use("/auth", authRoutes);
-app.use("/message", messageRoutes);
+app.use("/messages", messageRoutes);
 
 app.listen(port, () => {
   console.log(`server is running on http://localhost:${port}`);
