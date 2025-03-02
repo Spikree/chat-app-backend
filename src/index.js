@@ -5,9 +5,9 @@ import dotenv from "dotenv";
 import connectDb from "./lib/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { app, server } from "./lib/Socket.js";
 
 dotenv.config();
-const app = express();
 connectDb();
 
 // Updated body-parser configuration
@@ -21,6 +21,6 @@ const port = process.env.PORT || 4001;
 app.use("/auth", authRoutes);
 app.use("/messages", messageRoutes);
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`server is running on http://localhost:${port}`);
 });
