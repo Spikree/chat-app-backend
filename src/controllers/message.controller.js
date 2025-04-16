@@ -77,7 +77,8 @@ export const sendMessage = async (req,res) => {
         await newMessage.save();
 
         // emit a socket event to notify the user that a new message has been sent
-        const receiverSocketId = getReceiverSocketId(receiverId);
+        const receiverSocketId = getReceiverSocketId(receiverId); // Ensure receiverSocketId is retrieved correctly
+
         if(receiverSocketId) {
           io.to(receiverSocketId).emit("newMessage", newMessage)
         }
@@ -87,7 +88,8 @@ export const sendMessage = async (req,res) => {
             newMessage
         })
     } catch (error) {
-        console.log("Error in send message controller");
+        console.log("Error in send message controller", error.message); // Log the error message for better debugging
+
         return res.status(500).json({
             message: "Internal server error"
         })
